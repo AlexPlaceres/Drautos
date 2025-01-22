@@ -52,7 +52,7 @@ class AnselPatch final : public IPatch
      */
     const char* GetPatchSignature() override
     {
-        return "7C 24 48 00 EB 08";
+        return "72 ?? B3 80 7C 24 48 00 EB";
     }
 };
 } // namespace Patches
