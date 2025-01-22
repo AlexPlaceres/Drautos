@@ -1,33 +1,28 @@
-﻿#ifndef FUNCTIONHOOK_H
-#define FUNCTIONHOOK_H
-
-#include <cstdint>
-#include <exception>
-#include <exceptions.hpp>
-
+﻿#ifndef EXTERNFUNCTIONHOOK_H
+#define EXTERNFUNCTIONHOOK_H
 #include "IFunctionHook.h"
 
-#include "../Host.h"
+#include <cstdint>
+#include <exceptions.hpp>
 
 namespace Hooks
 {
 /**
- * Represents a detour that hooks an existing function to add extra logic to it.
- * @tparam TargetRvaDebug Relative virtual address of the function to hook when
- *                        injected into debug executable.
- * @tparam TargetRvaRelease Relative virtual address of the function to hook
- *                          when injected into release executable.
- * @tparam TReturn Type of the return value of the target function.
- * @tparam TParams Types of the parameters of the target function.
+ * Represents a detour that hooks an existing function from an external
+ * module to alter its logic.
+ * @tparam TargetModule Name of the module that contains the target function.
+ * @tparam TargetFunction Name of the function that is to be hooked.
+ * @tparam TReturn Return type of the target function.
+ * @tparam TParams Parameter types of the target function.
  * @remarks Each implementation of this class can only be instantiated once due
  *          to the static nature of hooks.
  */
-template <uint64_t TargetRvaDebug, uint64_t TargetRvaRelease, typename TReturn,
-          typename... TParams>
-class FunctionHook : public IFunctionHook
+template <const char* TargetModule, const char* TargetFunction,
+          typename TReturn, typename... TParams>
+class ExternFunctionHook : public IFunctionHook
 {
 private:
-    inline static FunctionHook* instance_;
+    inline static ExternFunctionHook* instance_;
 
     /**
      * Static wrapper for @code Detour @endcode as the non-static function
@@ -62,7 +57,7 @@ public:
      * @exception exception Thrown if this hook has already been instantiated
      * once.
      */
-    FunctionHook()
+    ExternFunctionHook()
     {
         if (instance_)
         {
@@ -71,13 +66,12 @@ public:
         }
 
         instance_ = this;
-        original_ = reinterpret_cast<Original_t>(
-            REBASE(TargetRvaDebug, TargetRvaRelease));
+
+        const auto module = GetModuleHandleA(TargetModule);
+        const auto function = GetProcAddress(module, TargetFunction);
+        const auto address = reinterpret_cast<uint64_t>(function);
+        original_ = reinterpret_cast<Original_t>(address);
     }
-
-    FunctionHook(const FunctionHook&) = delete;
-
-    FunctionHook& operator=(const FunctionHook&) = delete;
 
     /**
      * @copydoc IFunctionHook::GetTargetFunctionPointerReference
@@ -97,4 +91,4 @@ public:
 };
 } // namespace Hooks
 
-#endif // FUNCTIONHOOK_H
+#endif // EXTERNFUNCTIONHOOK_H
