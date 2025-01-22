@@ -31,7 +31,7 @@
  */
 class Host
 {
-  public:
+public:
     /**
      * Represents the type of game build that Drautos was injected into.
      */

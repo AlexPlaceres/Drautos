@@ -27,7 +27,7 @@ template <uint64_t TargetRvaDebug, uint64_t TargetRvaRelease, typename TReturn,
           typename... TParams>
 class FunctionHook : public IFunctionHook
 {
-  private:
+private:
     inline static FunctionHook* instance_;
 
     /**
@@ -41,7 +41,7 @@ class FunctionHook : public IFunctionHook
         return instance_->Detour(params...);
     }
 
-  protected:
+protected:
     using Original_t = TReturn (*)(TParams...);
 
     /**
@@ -57,7 +57,7 @@ class FunctionHook : public IFunctionHook
      */
     virtual TReturn Detour(TParams... params) = 0;
 
-  public:
+public:
     /**
      * Instantiates the function hook.
      * @exception exception Thrown if this hook has already been instantiated

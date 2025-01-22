@@ -14,7 +14,7 @@ namespace Patches
  */
 class AnselPatch final : public IPatch
 {
-  public:
+public:
     bool ShouldApply() override
     {
         return Configuration::GetInstance().EnableAnselPatch;

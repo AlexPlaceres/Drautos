@@ -13,7 +13,7 @@ namespace Patches
  */
 class PatchManager
 {
-  private:
+private:
     std::vector<IPatch*> patches_;
 
     PatchManager() = default;
@@ -26,7 +26,7 @@ class PatchManager
         }
     }
 
-  public:
+public:
     static PatchManager& GetInstance()
     {
         static PatchManager instance;

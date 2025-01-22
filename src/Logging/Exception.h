@@ -19,7 +19,7 @@
  */
 class Exception
 {
-  public:
+public:
     /**
      * Logs a critical error message, informs the user of the fatal event, then
      * terminates the game.
@@ -102,7 +102,7 @@ class Exception
         std::_Exit(EXIT_FAILURE);
     }
 
-  private:
+private:
     /**
      * Runs before the application is terminated to inform the user of what went
      * wrong.

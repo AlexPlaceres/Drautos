@@ -7,11 +7,11 @@
  */
 struct Configuration
 {
-  private:
+private:
     inline static HANDLE hMappedFile = nullptr;
     inline static Configuration* pInstance = nullptr;
 
-  public:
+public:
     Configuration(const Configuration&) = delete;
 
     Configuration& operator=(const Configuration&) = delete;
@@ -64,7 +64,7 @@ struct Configuration
      */
     bool IncreaseSnapshotLimit;
 
-  private:
+private:
     ~Configuration()
     {
         if (pInstance)

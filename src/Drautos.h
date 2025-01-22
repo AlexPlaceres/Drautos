@@ -15,7 +15,7 @@
 
 class Drautos
 {
-  public:
+public:
     static void Run()
     {
         Host::Initialize();
@@ -23,7 +23,7 @@ class Drautos
         ApplyHooks();
     }
 
-  private:
+private:
     static void ApplyPatches()
     {
         SPDLOG_INFO("Registering patches");

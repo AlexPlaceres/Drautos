@@ -15,7 +15,7 @@ namespace Hooks
  */
 class FunctionHookManager
 {
-  private:
+private:
     std::vector<IFunctionHook*> hooks_;
 
     FunctionHookManager() = default;
@@ -28,7 +28,7 @@ class FunctionHookManager
         }
     }
 
-  public:
+public:
     static FunctionHookManager& GetInstance()
     {
         static FunctionHookManager instance;

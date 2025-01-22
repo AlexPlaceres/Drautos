@@ -16,10 +16,10 @@ namespace SQEX::Luminous::AssetManager
  */
 class LmFileList
 {
-  private:
+private:
     inline static bool hasInitializedVector_;
 
-  public:
+public:
     /**
      * Adds a patch index archive to the asset manager's file list.
      * @param lmAssetID The identifier of the patch index asset.

@@ -1,5 +1,6 @@
 ﻿#ifndef PATCH1HOOK_H
 #define PATCH1HOOK_H
+
 #include <cpptrace/from_current.hpp>
 #include <mutex>
 
@@ -28,13 +29,13 @@ namespace Hooks
  */
 class Patch1Hook final : public FunctionHook<0x0, 0x36cb50, void*>
 {
-  private:
+private:
     using AcquireAsset_t = void*(__fastcall*)(void* pAssetManager, LmAssetID*,
                                               uint64_t, int64_t);
 
     std::once_flag hasApplied_;
 
-  protected:
+protected:
     /**
      * Gets the singleton instance of the font utilities class.
      * @return The font utilities instance.
@@ -75,7 +76,7 @@ class Patch1Hook final : public FunctionHook<0x0, 0x36cb50, void*>
         return original_();
     }
 
-  public:
+public:
     bool ShouldApply() override
     {
         return true;

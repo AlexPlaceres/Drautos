@@ -33,7 +33,7 @@ struct MemorySignatureByte
  */
 struct MemorySignature
 {
-  private:
+private:
     /**
      * Parses a hex character.
      * @param value The character to parse.
@@ -62,7 +62,7 @@ struct MemorySignature
         throw std::invalid_argument("Invalid hex character.");
     }
 
-  public:
+public:
     /**
      * Instantiates a new MemorySignature from a hexadecimal string.
      * @param hexString String representation of a hexadecimal memory pattern.

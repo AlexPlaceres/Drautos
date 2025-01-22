@@ -1,5 +1,6 @@
 ﻿#ifndef SNAPSHOTLIMITHOOK_H
 #define SNAPSHOTLIMITHOOK_H
+
 #include "../../Configuration.h"
 #include "../FunctionHook.h"
 
@@ -17,7 +18,7 @@ namespace Hooks
 class SnapshotLimitHook final
     : public FunctionHook<0x11CF2D0, 0x8FCBDE0, int64_t>
 {
-  protected:
+protected:
     /**
      * Returns the maximum number of snapshots the user is allowed to store.
      * @return The new snapshot limit.
@@ -27,7 +28,7 @@ class SnapshotLimitHook final
         return 9999;
     }
 
-  public:
+public:
     bool ShouldApply() override
     {
         return Configuration::GetInstance().IncreaseSnapshotLimit;

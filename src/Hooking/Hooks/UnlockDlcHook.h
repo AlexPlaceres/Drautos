@@ -18,13 +18,13 @@ namespace Hooks
 class UnlockDlcHook final
     : public FunctionHook<0x7BCFF0, 0x7114F80, void, void*, void*>
 {
-  public:
+public:
     bool ShouldApply() override
     {
         return Configuration::GetInstance().UnlockAdditionalDlc;
     }
 
-  protected:
+protected:
     /**
      * Disables all DLC.
      * @param pAppContentManager The DLC manager.

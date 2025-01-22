@@ -14,7 +14,7 @@
  */
 class Logging
 {
-  public:
+public:
     static inline std::string LogFilePath;
 
     /**
@@ -24,6 +24,9 @@ class Logging
      */
     static void Initialize()
     {
+        // TODO: Delete old logs, as currently they will continue to stack up
+        //       forever. Also consider preventing the log file getting to big
+        //       in the event that there is spam from a detour function
         LogFilePath = CreateLogPath();
 
         if (Configuration::GetInstance().EnableConsole)
@@ -32,13 +35,16 @@ class Logging
 
             // Create a logger that logs to both a file and the console
             const auto fileSink =
-                std::make_shared<spdlog::sinks::basic_file_sink_mt>(LogFilePath,
-                                                                    true);
+                std::make_shared<spdlog::sinks::basic_file_sink_mt>
+                    (LogFilePath, true);
+
             const auto consoleSink =
                 std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+
             std::vector<spdlog::sink_ptr> sinks{fileSink, consoleSink};
             const auto logger = std::make_shared<spdlog::logger>(
                 "default", begin(sinks), end(sinks));
+
             set_default_logger(logger);
             spdlog::set_level(spdlog::level::trace);
         }
@@ -58,7 +64,7 @@ class Logging
         SPDLOG_INFO("Initialized logging with file {}", LogFilePath);
     }
 
-  private:
+private:
     /**
      * Creates a file path string for a new log file, where the name contains a
      * timestamp for when the game was launched.

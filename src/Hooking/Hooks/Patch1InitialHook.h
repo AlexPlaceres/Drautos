@@ -1,5 +1,6 @@
 ﻿#ifndef PATCH1INITIALHOOK_H
 #define PATCH1INITIALHOOK_H
+
 #include <mutex>
 
 #include "../FunctionHook.h"
@@ -26,13 +27,13 @@ namespace Hooks
 class Patch1InitialHook final
     : public FunctionHook<0x4FBA60, 0x4CE960, int64_t, void*>
 {
-  private:
+private:
     using AcquireAsset_t = void*(__fastcall*)(void* pAssetManager, LmAssetID*,
                                               uint64_t, int64_t);
 
     std::once_flag hasApplied_;
 
-  protected:
+protected:
     /**
      * Runs early initialization steps.
      * @param pApplicationBase The game's main application class.
@@ -75,7 +76,7 @@ class Patch1InitialHook final
         return original_(pApplicationBase);
     }
 
-  public:
+public:
     bool ShouldApply() override
     {
         return true;

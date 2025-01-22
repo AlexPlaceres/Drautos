@@ -8,7 +8,7 @@ namespace Hooks
  */
 class IFunctionHook
 {
-  public:
+public:
     virtual ~IFunctionHook() = default;
 
     /**

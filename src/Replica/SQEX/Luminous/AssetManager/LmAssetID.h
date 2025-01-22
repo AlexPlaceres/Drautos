@@ -12,14 +12,14 @@ namespace SQEX::Luminous::AssetManager
  */
 struct LmAssetID
 {
-  private:
+private:
     explicit LmAssetID(const char* uri)
     {
         fullHash_ = 0;
         m_path = uri;
     }
 
-  public:
+public:
     /**
      * The raw value of the asset ID. This is a combined hash of the URI and
      * type (file extension).

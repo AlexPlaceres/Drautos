@@ -23,11 +23,11 @@ namespace Hooks
 class UnmaskCompressedHook final
     : public FunctionHook<0xD0C7D0, 0xC1C520, void*, void*, void*>
 {
-  private:
+private:
     const int16_t COMPRESSED = 2;
     const int16_t MASK_COMPRESSED = 256;
 
-  protected:
+protected:
     bool ShouldApply() override
     {
         return true;

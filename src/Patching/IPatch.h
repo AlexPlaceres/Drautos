@@ -8,7 +8,7 @@ namespace Patches
  */
 class IPatch
 {
-  public:
+public:
     virtual ~IPatch() = default;
 
     /**

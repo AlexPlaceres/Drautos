@@ -18,7 +18,7 @@ namespace Patches
  */
 class TwitchPrimePatch final : public IPatch
 {
-  public:
+public:
     /**
      * Only applies to the release build, as the DLC flags do not have a setter
      * in debug.\n Instead, the values of the DLC flags are assigned directly.
