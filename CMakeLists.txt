@@ -40,6 +40,7 @@ add_library(Drautos SHARED src/main.cpp
         src/Logging/Exception.h
         src/Drautos.h
         src/Hooking/Hooks/SteamRestartHook.h
+        src/Hooking/ExternFunctionHook.h
 )
 
 set_target_properties(Drautos PROPERTIES PREFIX "")
