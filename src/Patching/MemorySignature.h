@@ -22,7 +22,10 @@ struct MemorySignatureByte
      */
     uint8_t Value{0};
 
-    bool operator==(const uint8_t byte) const { return IsWildcard || Value == byte; }
+    bool operator==(const uint8_t byte) const
+    {
+        return IsWildcard || Value == byte;
+    }
 };
 
 /**
@@ -30,7 +33,7 @@ struct MemorySignatureByte
  */
 struct MemorySignature
 {
-private:
+  private:
     /**
      * Parses a hex character.
      * @param value The character to parse.
@@ -59,7 +62,7 @@ private:
         throw std::invalid_argument("Invalid hex character.");
     }
 
-public:
+  public:
     /**
      * Instantiates a new MemorySignature from a hexadecimal string.
      * @param hexString String representation of a hexadecimal memory pattern.
@@ -83,7 +86,8 @@ public:
             else
             {
                 // Value is a hex character
-                Signature[Size++].Value = ParseOctet(hexString[i]) << 4 | ParseOctet(hexString[i + 1]);
+                Signature[Size++].Value = ParseOctet(hexString[i]) << 4 |
+                                          ParseOctet(hexString[i + 1]);
             }
         }
     }
@@ -116,9 +120,9 @@ public:
         {
             // Check if the memory is accessible
             MEMORY_BASIC_INFORMATION memoryInfo;
-            if (!VirtualQuery(current, &memoryInfo, sizeof(memoryInfo))
-                || memoryInfo.State != MEM_COMMIT
-                || memoryInfo.Protect & PAGE_GUARD)
+            if (!VirtualQuery(current, &memoryInfo, sizeof(memoryInfo)) ||
+                memoryInfo.State != MEM_COMMIT ||
+                memoryInfo.Protect & PAGE_GUARD)
             {
                 continue;
             }
@@ -128,14 +132,17 @@ public:
             const auto end = start + memoryInfo.RegionSize;
 
             // Search for the signature in the region
-            auto found = std::search(start, end,
-                                     Signature.begin(), Signature.begin() + Size); // NOLINT(*-narrowing-conversions)
+            auto found = std::search(
+                start, end, Signature.begin(),
+                Signature.begin() + Size); // NOLINT(*-narrowing-conversions)
 
             while (found < end && found >= start)
             {
                 results.push_back(found);
-                found = std::search(found + Size, end,
-                                    Signature.begin(), Signature.begin() + Size); // NOLINT(*-narrowing-conversions)
+                found =
+                    std::search(found + Size, end, Signature.begin(),
+                                Signature.begin() +
+                                    Size); // NOLINT(*-narrowing-conversions)
             }
 
             // Reset for the next region
@@ -147,7 +154,8 @@ public:
     }
 
     /**
-     * Replaces all occurrences of this byte pattern in the game's memory with the given patch.
+     * Replaces all occurrences of this byte pattern in the game's memory with
+     * the given patch.
      * @param patch The byte pattern to replace this signature with.
      * @return The number of matches of this signature that were replaced.
      */
@@ -160,11 +168,12 @@ public:
             throw cpptrace::runtime_error("Failed to find signature.");
         }
 
-        for (const auto current: matches)
+        for (const auto current : matches)
         {
             // Make the memory writable
             DWORD oldProtection;
-            VirtualProtect(current, 128, PAGE_EXECUTE_READWRITE, &oldProtection);
+            VirtualProtect(current, 128, PAGE_EXECUTE_READWRITE,
+                           &oldProtection);
 
             // Patch the signature
             for (auto p = 0; p < patch.Size; p++)
@@ -184,4 +193,4 @@ public:
     }
 };
 
-#endif //MEMORYSIGNATURE_H
+#endif // MEMORYSIGNATURE_H

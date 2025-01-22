@@ -2,20 +2,20 @@
 #define DRAUTOS_H
 #include <spdlog/spdlog.h>
 
-#include "Host.h"
 #include "Hooking/FunctionHookManager.h"
 #include "Hooking/Hooks/Patch1Hook.h"
 #include "Hooking/Hooks/Patch1InitialHook.h"
 #include "Hooking/Hooks/SnapshotLimitHook.h"
 #include "Hooking/Hooks/UnlockDlcHook.h"
 #include "Hooking/Hooks/UnmaskCompressedHook.h"
+#include "Host.h"
 #include "Patching/PatchManager.h"
 #include "Patching/Patches/AnselPatch.h"
 #include "Patching/Patches/TwitchPrimePatch.h"
 
 class Drautos
 {
-public:
+  public:
     static void Run()
     {
         Host::Initialize();
@@ -23,7 +23,7 @@ public:
         ApplyHooks();
     }
 
-private:
+  private:
     static void ApplyPatches()
     {
         SPDLOG_INFO("Registering patches");
@@ -52,4 +52,4 @@ private:
     }
 };
 
-#endif //DRAUTOS_H
+#endif // DRAUTOS_H

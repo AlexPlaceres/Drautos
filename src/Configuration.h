@@ -7,11 +7,11 @@
  */
 struct Configuration
 {
-private:
+  private:
     inline static HANDLE hMappedFile = nullptr;
     inline static Configuration* pInstance = nullptr;
 
-public:
+  public:
     Configuration(const Configuration&) = delete;
 
     Configuration& operator=(const Configuration&) = delete;
@@ -21,7 +21,8 @@ public:
         if (!pInstance)
         {
             // Open shared memory that was written by C#
-            hMappedFile = OpenFileMapping(FILE_MAP_READ, false, "DrautosConfiguration");
+            hMappedFile =
+                OpenFileMapping(FILE_MAP_READ, false, "DrautosConfiguration");
             if (!hMappedFile)
             {
                 throw cpptrace::runtime_error("Failed to open configuration.");
@@ -29,10 +30,7 @@ public:
 
             // Map this configuration struct from shared memory
             pInstance = static_cast<Configuration*>(MapViewOfFile(
-                hMappedFile,
-                FILE_MAP_READ,
-                0, 0,
-                sizeof(Configuration)));
+                hMappedFile, FILE_MAP_READ, 0, 0, sizeof(Configuration)));
 
             // Ensure the configuration was mapped
             if (!pInstance)
@@ -51,7 +49,8 @@ public:
     bool EnableConsole;
 
     /**
-     * Whether ansel should be patched to allow it to function whenever the player likes.
+     * Whether ansel should be patched to allow it to function whenever the
+     * player likes.
      */
     bool EnableAnselPatch;
 
@@ -65,7 +64,7 @@ public:
      */
     bool IncreaseSnapshotLimit;
 
-private:
+  private:
     ~Configuration()
     {
         if (pInstance)
@@ -82,4 +81,4 @@ private:
     }
 };
 
-#endif //CONFIGURATION_H
+#endif // CONFIGURATION_H
