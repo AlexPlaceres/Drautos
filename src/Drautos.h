@@ -6,6 +6,7 @@
 #include "Hooking/Hooks/Patch1Hook.h"
 #include "Hooking/Hooks/Patch1InitialHook.h"
 #include "Hooking/Hooks/SnapshotLimitHook.h"
+#include "Hooking/Hooks/SteamRestartHook.h"
 #include "Hooking/Hooks/UnlockDlcHook.h"
 #include "Hooking/Hooks/UnmaskCompressedHook.h"
 #include "Host.h"
@@ -45,6 +46,7 @@ private:
         hookManager.Register<Hooks::Patch1Hook>();
         hookManager.Register<Hooks::SnapshotLimitHook>();
         hookManager.Register<Hooks::UnlockDlcHook>();
+        hookManager.Register<Hooks::SteamRestartHook>();
 
         SPDLOG_INFO("Applying hooks");
         hookManager.ApplyHooks();
