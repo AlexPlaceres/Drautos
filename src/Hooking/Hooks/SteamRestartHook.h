@@ -3,6 +3,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "../ExternFunctionHook.h"
+
 namespace Hooks
 {
 constexpr char STEAM_RESTART_HOOK_MODULE[] = "steam_api64.dll";
