@@ -2,12 +2,15 @@
 #define LOGGING_H
 
 #include <ShlObj_core.h>
+#include <filesystem>
 #include <fmt/chrono.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
 #include "../Configuration.h"
+
+namespace fs = std::filesystem;
 
 /**
  * Helper class that sets up logging for the application.
@@ -24,9 +27,7 @@ public:
      */
     static void Initialize()
     {
-        // TODO: Delete old logs, as currently they will continue to stack up
-        //       forever. Also consider preventing the log file getting to big
-        //       in the event that there is spam from a detour function
+        PruneLogFiles();
         LogFilePath = CreateLogPath();
 
         if (Configuration::GetInstance().EnableConsole)
@@ -35,8 +36,8 @@ public:
 
             // Create a logger that logs to both a file and the console
             const auto fileSink =
-                std::make_shared<spdlog::sinks::basic_file_sink_mt>
-                    (LogFilePath, true);
+                std::make_shared<spdlog::sinks::basic_file_sink_mt>(LogFilePath,
+                                                                    true);
 
             const auto consoleSink =
                 std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
@@ -72,17 +73,9 @@ private:
      */
     static std::string CreateLogPath()
     {
-        // Get local app data path
-        char path[MAX_PATH];
-        if (SHGetFolderPathA(nullptr, CSIDL_LOCAL_APPDATA, nullptr, 0, path) !=
-            S_OK)
-        {
-            throw std::runtime_error("Unable to create log file.");
-        }
-
-        // Append the current date/time and return the final path
+        const auto directory = GetLogDirectory();
         const auto now = std::time(nullptr);
-        return fmt::format(R"({}\Flagrum\logs\game_{:%Y%m%d%H%M%S}.log)", path,
+        return fmt::format(R"({}\game_{:%Y%m%d%H%M%S}.log)", directory,
                            fmt::localtime(now));
     }
 
@@ -102,6 +95,59 @@ private:
         const auto hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleMode(hConsole,
                        ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
+    }
+
+    /**
+     * Ensures only the latest 30 log files are retained to prevent too much
+     * disk space being used up.
+     */
+    static void PruneLogFiles()
+    {
+        constexpr auto limit = 30;
+        std::vector<fs::directory_entry> logFiles;
+
+        // Find all log files
+        for (const auto& entry : fs::directory_iterator(GetLogDirectory()))
+        {
+            if (entry.is_regular_file() && entry.path().extension() == ".log")
+            {
+                logFiles.push_back(entry);
+            }
+        }
+
+        if (logFiles.size() > limit)
+        {
+            // Sort log files by last write time
+            std::ranges::sort(logFiles, [](const fs::directory_entry& a,
+                                           const fs::directory_entry& b) {
+                return last_write_time(a) < last_write_time(b);
+            });
+
+            // Delete oldest files
+            while (logFiles.size() > limit)
+            {
+                fs::remove(logFiles.front().path());
+                logFiles.erase(logFiles.begin());
+            }
+        }
+    }
+
+    /**
+     * Gets the folder where log files are stored.
+     * @return The absolute path to the log file directory.
+     */
+    static std::string GetLogDirectory()
+    {
+        char path[MAX_PATH];
+        const auto result =
+            SHGetFolderPathA(nullptr, CSIDL_LOCAL_APPDATA, nullptr, 0, path);
+
+        if (result != S_OK)
+        {
+            throw std::runtime_error("Unable to create log file.");
+        }
+
+        return fmt::format(R"({}\Flagrum\logs)", path);
     }
 };
 
