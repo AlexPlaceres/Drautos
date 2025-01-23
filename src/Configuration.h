@@ -7,6 +7,17 @@
  */
 struct Configuration
 {
+public:
+    /**
+     * Represents the type of game build that Drautos was injected into.
+     */
+    enum GameExecutableType : uint8_t
+    {
+        UNKNOWN, /**< Release type could not be discerned. */
+        DEBUG,   /**< Only known debug release of the game. */
+        RELEASE  /**< Latest Steam release of the game. */
+    };
+
 private:
     inline static HANDLE hMappedFile = nullptr;
     inline static Configuration* pInstance = nullptr;
@@ -42,6 +53,11 @@ public:
 
         return *pInstance;
     }
+
+    /**
+     * The type of game executable that Drautos was injected into.
+     */
+    GameExecutableType HostType;
 
     /**
      * Whether to open a console and redirect output to it.

@@ -25,7 +25,7 @@ public:
      */
     bool ShouldApply() override
     {
-        return Host::Type == Host::DEBUG &&
+        return Host::Type == Configuration::DEBUG &&
                Configuration::GetInstance().UnlockAdditionalDlc;
     }
 

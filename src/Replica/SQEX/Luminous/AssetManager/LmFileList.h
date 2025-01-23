@@ -36,7 +36,7 @@ public:
 
         // For some accursed reason, the vector crashes on push_back on the
         // debug build if we don't create a new one
-        if (!hasInitializedVector_ && Host::Type == Host::DEBUG)
+        if (!hasInitializedVector_ && Host::Type == Configuration::DEBUG)
         {
             hasInitializedVector_ = true;
             *pPatchIndexEarcList = std::vector<uint64_t>();

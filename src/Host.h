@@ -1,6 +1,8 @@
 ﻿#ifndef HOST_H
 #define HOST_H
 
+#include "Configuration.h"
+
 #include <cstdint>
 #include <exceptions.hpp>
 #include <psapi.h>
@@ -15,7 +17,7 @@
  * @return The resolved RVA to use.
  */
 #define DISCERN(debugRva, releaseRva)                                          \
-    (Host::Type == Host::DEBUG ? debugRva : releaseRva)
+    (Host::Type == Configuration::DEBUG ? debugRva : releaseRva)
 
 /**
  * Converts a relative virtual address (RVA) to an absolute address.
@@ -24,7 +26,8 @@
  * @return The computed absolute address.
  */
 #define REBASE(debugRva, releaseRva)                                           \
-    (Host::BaseAddress + (Host::Type == Host::DEBUG ? debugRva : releaseRva))
+    (Host::BaseAddress +                                                       \
+     (Host::Type == Configuration::DEBUG ? debugRva : releaseRva))
 
 /**
  * Assists in interacting with the host process (FFXV).
@@ -32,21 +35,6 @@
 class Host
 {
 public:
-    /**
-     * Represents the type of game build that Drautos was injected into.
-     */
-    enum BuildType
-    {
-        UNKNOWN, /**< Release type could not be discerned. */
-        DEBUG,   /**< Only known debug release of the game. */
-        RELEASE  /**< Latest Steam release of the game. */
-    };
-
-    /**
-     * The build type of the host process.
-     */
-    inline static BuildType Type;
-
     /**
      * Handle to the host process module.
      */
@@ -62,6 +50,11 @@ public:
      */
     inline static uint32_t ModuleSize;
 
+    /**
+     * The type of game executable that Drautos was injected into.
+     */
+    inline static Configuration::GameExecutableType Type;
+
     Host() = delete;
 
     /**
@@ -69,9 +62,9 @@ public:
      */
     static void Initialize()
     {
-        Type = RELEASE;
         hModule = GetModuleHandle("ffxv_s.exe");
         BaseAddress = reinterpret_cast<uint64_t>(hModule);
+        Type = Configuration::GetInstance().HostType;
 
         MODULEINFO moduleInfo;
         if (!GetModuleInformation(GetCurrentProcess(), hModule, &moduleInfo,
