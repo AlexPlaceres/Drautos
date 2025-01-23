@@ -37,7 +37,7 @@ public:
      */
     const char* GetTargetSignature() override
     {
-        return "72 ?? B3 80 7C 24 48 00 75";
+        return "72 ?? 80 7C 24 48 00 75";
     }
 
     /**
@@ -52,7 +52,7 @@ public:
      */
     const char* GetPatchSignature() override
     {
-        return "72 ?? B3 80 7C 24 48 00 EB";
+        return "72 ?? 80 7C 24 48 00 EB";
     }
 };
 } // namespace Patches
