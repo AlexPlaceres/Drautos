@@ -27,7 +27,7 @@ namespace Hooks
  * calling it earlier was causing visual anomalies once the game was loaded,
  * which seemed possibly related to shader passes.
  */
-class Patch1Hook final : public FunctionHook<0x0, 0x36cb50, void*>
+class Patch1Hook final : public FunctionHook<0x3a3e70, 0x36cb50, void*>
 {
 private:
     using AcquireAsset_t = void*(__fastcall*)(void* pAssetManager, LmAssetID*,
