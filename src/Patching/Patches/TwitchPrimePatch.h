@@ -7,25 +7,25 @@
 namespace Patches
 {
 /**
- * Patches the release build of the game to enable the old Twitch Prime chocobo
- * skin.
+ * Patches the release build of the game to enable the discontinued
+ * Twitch Prime chocobo skin.
  * @remarks This targets the setter for the DLC flags in the save data struct.
  *          While this patch is named for the Twitch Prime chocobo, it also
- * enables other DLC flags that are set in various places. However, this only
- * seems relevant to Twitch Prime as it was the only minor piece of content that
- * was not enabled by the UnlockDlcHook, while this patch does not enable all of
- * the content that that hook does.
+ *          enables other DLC flags that are set in various places. However,
+ *          this only seems relevant to Twitch Prime as it was the only minor
+ *          piece of content that was not enabled by the UnlockDlcHook, while
+ *          this patch does not enable all of the content that that hook does.
  */
 class TwitchPrimePatch final : public IPatch
 {
 public:
     /**
      * Only applies to the release build, as the DLC flags do not have a setter
-     * in debug.\n Instead, the values of the DLC flags are assigned directly.
+     * in debug. Instead, the values of the DLC flags are assigned directly.
      */
     bool ShouldApply() override
     {
-        return Host::Type == Host::DEBUG &&
+        return Host::Type == Configuration::RELEASE &&
                Configuration::GetInstance().UnlockAdditionalDlc;
     }
 

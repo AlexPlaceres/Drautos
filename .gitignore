@@ -12,6 +12,7 @@ _deps
 
 # CMake build output
 cmake-build-*/
+publish/
 
 # CLion IDE files
 .idea/
