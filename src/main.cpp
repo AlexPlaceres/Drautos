@@ -53,6 +53,10 @@ bool APIENTRY DllMain(HMODULE hModule, const DWORD ul_reason_for_call,
                 "An error occurred during the operation of Drautos");
         }
     }
+    else if (ul_reason_for_call == DLL_PROCESS_DETACH)
+    {
+        Logging::Deinitialize();
+    }
 
     return true;
 }

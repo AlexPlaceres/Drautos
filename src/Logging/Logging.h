@@ -17,6 +17,9 @@ namespace fs = std::filesystem;
  */
 class Logging
 {
+private:
+    static inline bool isInitialized_;
+
 public:
     static inline std::string LogFilePath;
 
@@ -60,9 +63,20 @@ public:
 
         // See https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
         spdlog::set_pattern("[%H:%M:%S.%e] [thread %t] %^%-8l%$  %v  %@");
-        spdlog::flush_on(spdlog::level::trace);
 
         SPDLOG_INFO("Initialized logging with file {}", LogFilePath);
+        isInitialized_ = true;
+    }
+
+    /**
+     * Shuts down logging for the program.
+     */
+    static void Deinitialize()
+    {
+        if (isInitialized_)
+        {
+            spdlog::shutdown();
+        }
     }
 
 private:
