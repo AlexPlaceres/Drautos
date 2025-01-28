@@ -44,9 +44,7 @@ protected:
     int64_t Detour(void* pApplicationBase) override
     {
         std::call_once(hasApplied_, [] {
-            SPDLOG_INFO("Adding patch1_initial to asset manager");
-
-            CPPTRACE_TRY
+            try
             {
                 // Add patch1_initial to the asset manager
                 auto patchIndexId = LmAssetID::Create(
@@ -64,13 +62,11 @@ protected:
                     assetManagerBaseAddress + 8);
                 acquireAsset(assetManager, &patchIndexId, 0, 2);
             }
-            CPPTRACE_CATCH(...)
+            catch (...)
             {
                 Exception::Fatal(
                     "Failed to add patch1_initial to asset manager");
             }
-
-            SPDLOG_INFO("Finished adding patch1_initial to asset manager");
         });
 
         return original_(pApplicationBase);

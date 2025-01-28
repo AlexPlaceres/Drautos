@@ -1,6 +1,6 @@
 ﻿#ifndef CONFIGURATION_H
 #define CONFIGURATION_H
-#include <stdexcept>
+#include "Logging/Exception.h"
 
 /**
  * Configuration for Drautos.
@@ -36,7 +36,7 @@ public:
                 OpenFileMapping(FILE_MAP_READ, false, "DrautosConfiguration");
             if (!hMappedFile)
             {
-                throw cpptrace::runtime_error("Failed to open configuration.");
+                Exception::Fatal("Failed to load configuration.");
             }
 
             // Map this configuration struct from shared memory
@@ -47,8 +47,10 @@ public:
             if (!pInstance)
             {
                 CloseHandle(hMappedFile);
-                throw cpptrace::runtime_error("Failed to map configuration.");
+                Exception::Fatal("Failed to read configuration.");
             }
+
+            Exception::SetIsUsingConsole(pInstance->EnableConsole);
         }
 
         return *pInstance;

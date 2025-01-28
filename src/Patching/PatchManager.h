@@ -61,13 +61,12 @@ public:
                 auto expected = patch->GetExpectedTargetCount();
                 if (expected == 0)
                 {
-                    throw cpptrace::invalid_argument(
+                    Exception::Fatal(
                         "IPatch.GetExpectedTargetCount must not equal 0");
                 }
 
                 // Apply the patch
                 std::string name(typeid(*patch).name());
-                SPDLOG_INFO("Applying patch: {}", name);
                 auto target = MemorySignature(patch->GetTargetSignature());
                 const auto replacement =
                     MemorySignature(patch->GetPatchSignature());
@@ -76,21 +75,15 @@ public:
                 // Ensure the patch was applied as expected
                 if (expected < 1 && actual == 0)
                 {
-                    throw cpptrace::runtime_error("Failed to apply patch: " +
+                    Exception::Fatal("Failed to apply patch: " +
                                                   name);
                 }
 
                 if (actual != expected)
                 {
-                    SPDLOG_CRITICAL("Failed to apply patch: {}", name);
-                    SPDLOG_CRITICAL(
-                        "Expected {} occurrences of target signature, found {}",
-                        expected, actual);
-                    throw cpptrace::runtime_error("Failed to apply patch: " +
+                    Exception::Fatal("Failed to apply patch: " +
                                                   name);
                 }
-
-                SPDLOG_INFO("Applied patch: {}", name);
             }
         }
     }

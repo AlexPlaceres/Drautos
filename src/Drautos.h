@@ -1,6 +1,5 @@
 ﻿#ifndef DRAUTOS_H
 #define DRAUTOS_H
-#include <spdlog/spdlog.h>
 
 #include "Hooking/FunctionHookManager.h"
 #include "Hooking/Hooks/Patch1Hook.h"
@@ -27,19 +26,14 @@ public:
 private:
     static void ApplyPatches()
     {
-        SPDLOG_INFO("Registering patches");
         auto& patchManager = Patches::PatchManager::GetInstance();
         patchManager.Register<Patches::AnselPatch>();
         patchManager.Register<Patches::TwitchPrimePatch>();
-
-        SPDLOG_INFO("Applying patches");
         patchManager.ApplyPatches();
-        SPDLOG_INFO("Patches applied");
     }
 
     static void ApplyHooks()
     {
-        SPDLOG_INFO("Registering hooks");
         auto& hookManager = Hooks::FunctionHookManager::GetInstance();
         hookManager.Register<Hooks::UnmaskCompressedHook>();
         hookManager.Register<Hooks::Patch1InitialHook>();
@@ -47,10 +41,7 @@ private:
         hookManager.Register<Hooks::SnapshotLimitHook>();
         hookManager.Register<Hooks::UnlockDlcHook>();
         hookManager.Register<Hooks::SteamRestartHook>();
-
-        SPDLOG_INFO("Applying hooks");
         hookManager.ApplyHooks();
-        SPDLOG_INFO("Hooks applied");
     }
 };
 

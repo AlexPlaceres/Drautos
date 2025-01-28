@@ -4,9 +4,7 @@
 #include "Configuration.h"
 
 #include <cstdint>
-#include <exceptions.hpp>
 #include <psapi.h>
-#include <stdexcept>
 #include <windows.h>
 
 /**
@@ -70,8 +68,8 @@ public:
         if (!GetModuleInformation(GetCurrentProcess(), hModule, &moduleInfo,
                                   sizeof(moduleInfo)))
         {
-            throw cpptrace::runtime_error(
-                "Failed to get module information for ffxv_s.exe");
+            Exception::Fatal(
+                "Failed to get module information for ffxv_s.exe.");
         }
 
         ModuleSize = moduleInfo.SizeOfImage;

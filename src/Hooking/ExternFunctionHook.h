@@ -3,7 +3,6 @@
 #include "IFunctionHook.h"
 
 #include <cstdint>
-#include <exceptions.hpp>
 
 namespace Hooks
 {
@@ -61,8 +60,7 @@ public:
     {
         if (instance_)
         {
-            throw cpptrace::runtime_error(
-                "Cannot instantiate the same hook twice.");
+            Exception::Fatal("Cannot instantiate the same hook twice.");
         }
 
         instance_ = this;

@@ -1,8 +1,6 @@
 #ifndef STEAMRESTARTHOOK_H
 #define STEAMRESTARTHOOK_H
 
-#include <spdlog/spdlog.h>
-
 #include "../ExternFunctionHook.h"
 
 namespace Hooks
@@ -35,7 +33,6 @@ protected:
      */
     bool Detour(const uint32_t appId) override
     {
-        SPDLOG_DEBUG("SteamAPI_RestartAppIfNecessary detour called");
         original_(appId);
         return false;
     }

@@ -165,7 +165,7 @@ public:
 
         if (matches.size() == 0)
         {
-            throw cpptrace::runtime_error("Failed to find signature.");
+            Exception::Fatal("Failed to find memory signature.");
         }
 
         for (const auto current : matches)

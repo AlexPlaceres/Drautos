@@ -3,7 +3,6 @@
 
 #include <detours/detours.h>
 #include <processthreadsapi.h>
-#include <spdlog/spdlog.h>
 #include <vector>
 
 #include "IFunctionHook.h"
@@ -60,10 +59,8 @@ public:
         {
             if (hook->ShouldApply())
             {
-                SPDLOG_INFO("Attaching hook: {}", typeid(*hook).name());
                 DetourAttach(hook->GetTargetFunctionPointerReference(),
                              hook->GetDetourFunctionPointer());
-                SPDLOG_INFO("Hook attached: {}", typeid(*hook).name());
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿#ifndef PATCH1HOOK_H
 #define PATCH1HOOK_H
 
-#include <cpptrace/from_current.hpp>
 #include <mutex>
 
 #include "../FunctionHook.h"
@@ -45,9 +44,8 @@ protected:
     void* Detour() override
     {
         std::call_once(hasApplied_, [] {
-            SPDLOG_INFO("Adding patch1 to asset manager");
 
-            CPPTRACE_TRY
+            try
             {
                 // Add patch1 to the asset manager
                 auto patchIndexId =
@@ -65,12 +63,10 @@ protected:
                     assetManagerBaseAddress + 8);
                 acquireAsset(assetManager, &patchIndexId, 0, 2);
             }
-            CPPTRACE_CATCH(...)
+            catch (...)
             {
-                Exception::Fatal("Failed to add patch1 to asset manager");
+                Exception::Fatal();
             }
-
-            SPDLOG_INFO("Finished adding patch1 to asset manager");
         });
 
         return original_();

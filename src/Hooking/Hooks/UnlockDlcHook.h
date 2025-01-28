@@ -38,7 +38,7 @@ protected:
     {
         original_(pAppContentManager, pAppContentFlags);
 
-        CPPTRACE_TRY
+        try
         {
             // This is a function that is needed to get the argument for
             // GetInstance
@@ -63,12 +63,10 @@ protected:
                 currentFlag = static_cast<char*>(currentFlag) + 1;
             }
         }
-        CPPTRACE_CATCH(...)
+        catch (...)
         {
             Exception::Fatal("Failed to unlock hidden content");
         }
-
-        SPDLOG_INFO("Hidden content unlocked");
     }
 };
 } // namespace Hooks

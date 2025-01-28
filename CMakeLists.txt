@@ -10,8 +10,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_definitions(-D_AMD64_)
 
 # Find dependencies
-find_package(cpptrace CONFIG REQUIRED)
-find_package(spdlog CONFIG REQUIRED)
 find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
 find_library(DETOURS_LIBRARY detours REQUIRED)
 
@@ -36,7 +34,6 @@ add_library(Drautos SHARED src/main.cpp
         src/Patching/Patches/AnselPatch.h
         src/Patching/PatchManager.h
         src/Patching/Patches/TwitchPrimePatch.h
-        src/Logging/Logging.h
         src/Logging/Exception.h
         src/Drautos.h
         src/Hooking/Hooks/SteamRestartHook.h
@@ -46,7 +43,5 @@ add_library(Drautos SHARED src/main.cpp
 set_target_properties(Drautos PROPERTIES PREFIX "")
 
 # Link dependencies
-target_link_libraries(Drautos PRIVATE cpptrace::cpptrace)
-target_link_libraries(Drautos PRIVATE spdlog::spdlog)
 target_include_directories(Drautos PRIVATE ${DETOURS_INCLUDE_DIRS})
 target_link_libraries(Drautos PRIVATE ${DETOURS_LIBRARY})
