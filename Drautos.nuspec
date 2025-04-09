@@ -1,0 +1,12 @@
+﻿<package>
+    <metadata>
+        <id>Drautos</id>
+        <version>1.0.0</version>
+        <authors>AlexPlaceres, Kizari</authors>
+        <owners>AlexPlaceres, Kizari</owners>
+        <description>Mod loader for FFXV.</description>
+    </metadata>
+    <files>
+        <file src="build/Drautos.dll" target="runtimes/win-x64/native/Drautos.dll" />
+    </files>
+</package>

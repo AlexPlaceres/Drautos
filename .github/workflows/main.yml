@@ -1,0 +1,39 @@
+﻿name: Deploy to NuGet
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    name: Deploy Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install C++ Build Tools
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: msvc
+          vcvarsall: true
+          cmake: true
+          ninja: true
+          vcpkg: true
+
+      - name: Build Drautos
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja -B build
+          cmake --build build --target Drautos -j 14
+
+      - name: Install NuGet CLI
+        uses: nuget/setup-nuget@v2
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          nuget-version: '5.x'
+
+      - name: Publish NuGet Package
+        shell: pwsh
+        run: |
+          [xml]$nuspec = Get-Content "Drautos.nuspec"
+          $version = $nuspec.package.metadata.version
+          nuget pack Drautos.nuspec
+          nuget push Drautos.$version.nupkg -Source "https://api.nuget.org/v3/index.json" -ApiKey ${{ secrets.NUGET_API_KEY }}
