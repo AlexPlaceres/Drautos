@@ -17,7 +17,36 @@ class AnselPatch final : public IPatch
 public:
     bool ShouldApply() override
     {
-        return Configuration::GetInstance().EnableAnselPatch;
+        if (Configuration::GetInstance().EnableAnselPatch)
+        {
+            // Need to check if the patch is already applied since an old
+            // executable was distributed by another developer years ago to
+            // permanently modify the executable with this patch
+
+            // Check if the target signature exists
+            auto target = MemorySignature(GetTargetSignature());
+            const auto matches = target.Find();
+            if (matches.empty())
+            {
+                // Target signature does not exist, check if already patched
+                auto patch = MemorySignature(GetPatchSignature());
+                const auto patchMatches = patch.Find();
+                if (patchMatches.empty())
+                {
+                    // Patch is not present, this is an error
+                    Exception::Fatal("Could not apply Ansel patch "
+                                     "as signature was not found.");
+                }
+
+                // Already patched, do not apply
+                return false;
+            }
+
+            // Executable not modified, apply the patch
+            return true;
+        }
+
+        return false;
     }
 
     int GetExpectedTargetCount() override
