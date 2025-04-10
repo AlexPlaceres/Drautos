@@ -5,6 +5,9 @@
         <authors>AlexPlaceres, Kizari</authors>
         <owners>AlexPlaceres, Kizari</owners>
         <description>Mod loader for FFXV.</description>
+        <license type="file">LICENSE</license>
+        <repository type="git" url="https://github.com/AlexPlaceres/Drautos" />
+        <readme>README.md</readme>
     </metadata>
     <files>
         <file src="build/Drautos.dll" target="runtimes/win-x64/native/Drautos.dll" />
